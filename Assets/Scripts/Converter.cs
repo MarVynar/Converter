@@ -33,15 +33,7 @@ public class Converter : MonoBehaviour
 
         string arabicString = arabic.text.ToString();
 
-        // int arab = 0;
-
-        // Int64.TryParse(arabicString, out arab);
-
-
-
-        //arabicnumber = arabicString.
-
-
+      
         if ((arabicString != "" && romanString != "") || (arabicString == "" && romanString == ""))
         {
             Debug.Log("Wrong" + arabicString + "|" + romanString);
@@ -52,14 +44,13 @@ public class Converter : MonoBehaviour
 
         else if (arabicString != "" && romanString == "")
         {
-          //  Debug.Log("Arabic");
-            //  float Temp = float.Parse(arabicString);
+
             convertArabicToRoman(arabicString);
         }
 
         else if (romanString != "" && arabicString == "")
         {
-         //   Debug.Log("Roman");
+
             convertRomanToArabic(romanString);
         }
 
@@ -178,7 +169,7 @@ public class Converter : MonoBehaviour
 
     private string convertRomanToArabic(string rom)
     {
-      //  Debug.Log("Romanian is " + rom);
+     
         int num = rom.Length;
         Debug.Log(num);
         string result = "";
@@ -222,8 +213,7 @@ public class Converter : MonoBehaviour
 
         else
         {
-            //int tempres = 0;
-            //  while (i!= num)
+  
             int previousPeriod = 1000000;
             int lastElement = 0;
             do
@@ -237,20 +227,20 @@ public class Converter : MonoBehaviour
                     outputField.text = "Wrong number";
                     break;
                 } 
-
-                // Debug.Log(temp1);
+                
+  
                 if (i + 1 != num)
                 {
                     int temp2 = numbers[rom[i + 1]];
                     if ((temp2 > temp1) && ((temp2 / temp1 == 10) || (temp2 / temp1 == 5)))
                     {
-                       
+                      
                         if (temp1 > previousPeriod)
                         {
                             outputField.text = "Wrong number";
                             break;
                         }
-
+                        
                         tempres = temp2 - temp1;
                           Debug.Log(temp1 + " " + temp2 + " " + tempres+ "Yoyo");
                         res += tempres;
@@ -258,7 +248,7 @@ public class Converter : MonoBehaviour
                         i++;
                         lastElement = temp1;
 
-                      //  previousPeriod /= 10;
+
 
                     } // 
                     else
@@ -266,29 +256,28 @@ public class Converter : MonoBehaviour
                             {
                                     tempres = temp1 + temp2;
                                     
-                                 //   Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res + "trala");
+
 
                                     if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
                                     {
                                     tempres += numbers[rom[i + 2]];
-                                  //  lastElement = numbers[rom[i + 2]];
-                                    //   Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res + "tralala");
+
                                     if ((i + 3 != num) && (numbers[rom[i + 3]] == numbers[rom[i + 1]]))
                                     {
                                         tempres += numbers[rom[i + 3]];
-                                        // i += 3;
+
                                         i++;
-                                       //lastElement = numbers[rom[i + 3]];
+
                                         Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res+ "babubo");
                                     }
                                     i++;
-                                    // else i += 2;
+                               
                                 }
                                 i++;
-                                // else i += 1;
+                               
 
                                 res += tempres;
-                        //   previousPeriod /= 10;
+                       
                     }//
 
                             else if ( (temp2<temp1) && (temp1/ temp2>10))
@@ -300,16 +289,14 @@ public class Converter : MonoBehaviour
                     else
                            if ((temp2 == temp1))
                     {
-                        //tilky 1ky 
+        
                         tempres = temp1 + temp2;
                         lastElement = temp1;
-                        // Debug.Log(temp1 + " " + temp2 + " " + tempres);
-                        //Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res);
+
                         if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
                         {
                             tempres += numbers[rom[i + 2]];
-                            //   Debug.Log(temp1 + " " + temp2 + " " + numbers[rom[i + 2]] + " " + tempres);
-                           // Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res);
+   
                             i++;
                         }
 
@@ -324,13 +311,13 @@ public class Converter : MonoBehaviour
                     
                     res += temp1;
                     lastElement = temp1;
-                    Debug.Log("Lonely" + temp1 + " " + res);
+                 
                 }
 
 
 
                 i++;
-                float dec = Mathf.Pow (10f, previousPeriod.ToString().Length- lastElement.ToString().Length) ;
+                float dec = Mathf.Pow (10f, previousPeriod.ToString().Length- lastElement.ToString().Length -1) ;
                 previousPeriod /=  (int) dec;
 
                 
