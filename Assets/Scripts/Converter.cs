@@ -7,16 +7,18 @@ using UnityEngine.UI;
 public class Converter : MonoBehaviour
 {
 
-    [SerializeField] private Text roman;
-    [SerializeField] private Text arabic;
+    [SerializeField] private InputField roman;
+    [SerializeField] private InputField arabic;
     [SerializeField] private Text outputField;
+    [SerializeField] private GameObject helpImage;
 
     private int arabicnumber;
 
     // Use this for initialization
     void Start()
     {
-
+       
+       
 
     }
 
@@ -33,10 +35,10 @@ public class Converter : MonoBehaviour
 
         string arabicString = arabic.text.ToString();
 
-      
+
         if ((arabicString != "" && romanString != "") || (arabicString == "" && romanString == ""))
         {
-            Debug.Log("Wrong" + arabicString + "|" + romanString);
+            
             outputField.text = "Error! One field should be filled, other should be empty!";
         }
 
@@ -61,6 +63,14 @@ public class Converter : MonoBehaviour
     private string convertArabicToRoman(string ar)
     {
         int num = ar.Length;
+        if ((num > 7) || ((num ==7)&& (ar!= "1000000")))
+        {
+            outputField.text = "Number out of rage";
+            return "";
+        }
+
+      
+
         string result = "";
         string one = "";
         string five = "";
@@ -117,14 +127,16 @@ public class Converter : MonoBehaviour
             else if (ar == "1000000")                                      //1000000
             {
                 result = "m";
-                Debug.Log(result);
+                outputField.text = result;
+                roman.text = result;
                 return result;
 
             }
 
             else
             {
-                Debug.Log("wrong number");
+                outputField.text = "Wrong number";
+                return "";
             }
 
             switch (ar[i])
@@ -139,7 +151,7 @@ public class Converter : MonoBehaviour
                 case '8': resArray[i] = five + one + one + one; break;
                 case '9': resArray[i] = one + ten; break;
                 case '0': resArray[i] = ""; break;
-                default: Debug.Log("Wrong Number"); break;
+                default: outputField.text = "Wrong number"; break;
 
 
 
@@ -155,9 +167,9 @@ public class Converter : MonoBehaviour
             result += i;
         }
 
-        Debug.Log(result);
+
         outputField.text = result;
-    
+        roman.text = result;
 
         return result;
 
@@ -169,9 +181,9 @@ public class Converter : MonoBehaviour
 
     private string convertRomanToArabic(string rom)
     {
-     
+
         int num = rom.Length;
-        Debug.Log(num);
+     
         string result = "";
         int res = 0;
 
@@ -197,7 +209,7 @@ public class Converter : MonoBehaviour
 
         if ((num > 1) && (rom[0] == 'm'))
         {
-            Debug.Log("Out of rage");
+            
             outputField.text = "Wrong number!";
             result = "";
             return result;
@@ -208,95 +220,139 @@ public class Converter : MonoBehaviour
         {
             result = "1000000";
             outputField.text = result;
+            arabic.text = result;
             return result;
         }
 
         else
         {
-  
-            int previousPeriod = 1000000;
-            int lastElement = 0;
+
+
+            int lastElement = 1000001;
             do
             {
                 int tempres = 0;
                 int temp1 = numbers[rom[i]];
-
-                Debug.Log("Period _"+ previousPeriod);
-                if (temp1 > previousPeriod)
+                if (temp1 >= lastElement)
                 {
                     outputField.text = "Wrong number";
-                    break;
-                } 
+                    return "";
+                }
                 
-  
+
+
+
+                lastElement = temp1;
+                
                 if (i + 1 != num)
                 {
                     int temp2 = numbers[rom[i + 1]];
                     if ((temp2 > temp1) && ((temp2 / temp1 == 10) || (temp2 / temp1 == 5)))
                     {
-                      
-                        if (temp1 > previousPeriod)
-                        {
-                            outputField.text = "Wrong number";
-                            break;
-                        }
                         
+
+
                         tempres = temp2 - temp1;
-                          Debug.Log(temp1 + " " + temp2 + " " + tempres+ "Yoyo");
+                       
                         res += tempres;
-                        Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res + "Yo");
+                      
                         i++;
                         lastElement = temp1;
-
+                        
 
 
                     } // 
+
+                    else if ((temp2 > temp1) && ((temp2 / temp1 != 10) && (temp2 / temp1 != 5)))
+                    {
+                        outputField.text = "Wrong number";
+                        return "";
+
+                    }
+
+
                     else
                            if ((temp2 < temp1) && ((temp1 / temp2 == 5) || (temp1 / temp2 == 10)))
-                            {
-                                    tempres = temp1 + temp2;
-                                    
-
-
-                                    if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
-                                    {
-                                    tempres += numbers[rom[i + 2]];
-
-                                    if ((i + 3 != num) && (numbers[rom[i + 3]] == numbers[rom[i + 1]]))
-                                    {
-                                        tempres += numbers[rom[i + 3]];
-
-                                        i++;
-
-                                        Debug.Log(temp1 + " " + temp2 + " " + tempres + " " + res+ "babubo");
-                                    }
-                                    i++;
-                               
-                                }
-                                i++;
-                               
-
-                                res += tempres;
-                       
-                    }//
-
-                            else if ( (temp2<temp1) && (temp1/ temp2>10))
-                                {
-                                    res += temp1;
-                                    lastElement = temp2;
-                                }
-
-                    else
-                           if ((temp2 == temp1))
                     {
-        
                         tempres = temp1 + temp2;
-                        lastElement = temp1;
 
+                        lastElement = temp2;
+                       
+                        if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i]]))
+                        {
+                            tempres += numbers[rom[i + 2]] - numbers[rom[i + 1]] * 2;
+                            lastElement = numbers[rom[i + 1]];
+                            i++;
+                        }
+                        else
                         if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
                         {
                             tempres += numbers[rom[i + 2]];
-   
+                            lastElement = numbers[rom[i + 2]];
+                            
+                            if ((i + 3 != num) && (numbers[rom[i + 3]] == numbers[rom[i + 1]]))
+                            {
+                                tempres += numbers[rom[i + 3]];
+                                lastElement = numbers[rom[i + 3]];
+                                
+
+
+                                if ((i + 4 != num) && (numbers[rom[i + 4]] == numbers[rom[i + 1]]))
+                                {
+                                    outputField.text = "Wrong number";
+                                    return "";
+                                   
+                                }
+                               
+                                i++;
+
+                            }
+                            i++;
+
+                        }
+                        i++;
+
+
+                        res += tempres;
+
+                    }//
+
+                    else if ((temp2 < temp1) && (temp1 / temp2 > 10))
+                    {
+                        res += temp1;
+                        lastElement = temp2;
+                        
+                    }
+
+                    else
+                   if ((temp2 == temp1))
+                    {
+
+                        if (temp1.ToString()[0] == '5')
+                        {
+                            outputField.text = "Wrong number";
+                            return "";
+                           
+
+                        }
+
+
+
+
+                        tempres = temp1 + temp2;
+                        lastElement = temp1;
+                       
+                        if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
+                        {
+                            tempres += numbers[rom[i + 2]];
+                            if ((i + 3 != num) && (numbers[rom[i + 3]] == numbers[rom[i + 1]]))
+                            {
+                                outputField.text = "Wrong number";
+                                return "";
+                                
+
+                            }
+
                             i++;
                         }
 
@@ -308,20 +364,20 @@ public class Converter : MonoBehaviour
 
                 else
                 {
-                    
+
                     res += temp1;
                     lastElement = temp1;
-                 
+                  
+
                 }
 
 
 
                 i++;
-                float dec = Mathf.Pow (10f, previousPeriod.ToString().Length- lastElement.ToString().Length -1) ;
-                previousPeriod /=  (int) dec;
 
-                
-                 Debug.Log("Iteration " +tempres +res);
+
+
+              
             } while (i != num);
 
 
@@ -333,11 +389,32 @@ public class Converter : MonoBehaviour
 
 
         result = res.ToString();
-        Debug.Log(result);
         outputField.text = result;
+        arabic.text = result;
         return result;
 
     }
 
+
+
+    public void help()
+    {
+        helpImage.SetActive(true);
+
+    }
+    public void back()
+    {
+        helpImage.SetActive(false);
+
+    }
+
+
+    public void quit()
+    {
+        Application.Quit();
+
+    }
+
+   
 
 }
