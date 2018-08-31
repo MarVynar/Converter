@@ -233,9 +233,10 @@ public class Converter : MonoBehaviour
             {
                 int tempres = 0;
                 int temp1 = numbers[rom[i]];
-                if (temp1 >= lastElement)
+                if (temp1 > lastElement)
                 {
                     outputField.text = "Wrong number";
+                    Debug.Log(temp1 + " " + lastElement);
                     return "";
                 }
                 
@@ -284,6 +285,15 @@ public class Converter : MonoBehaviour
                             lastElement = numbers[rom[i + 1]];
                             i++;
                         }
+
+                        else if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i+1]]*5))
+                        {
+                            tempres += numbers[rom[i + 2]] - numbers[rom[i + 1]] * 2;
+                            lastElement = numbers[rom[i + 1]];
+                            i++;
+                        }
+
+
                         else
                         if ((i + 2 != num) && (numbers[rom[i + 2]] == numbers[rom[i + 1]]))
                         {
@@ -382,12 +392,12 @@ public class Converter : MonoBehaviour
 
 
 
-
+            Debug.Log(lastElement);
 
 
         }
 
-
+        
         result = res.ToString();
         outputField.text = result;
         arabic.text = result;
